@@ -3,6 +3,7 @@ A股复盘 Agent
 使用 akshare 获取实时A股数据，生成智能复盘报告
 """
 import os
+import sys
 import json
 from typing import Annotated
 from langchain.agents import create_agent
@@ -11,9 +12,14 @@ from langgraph.graph import MessagesState
 from langgraph.graph.message import add_messages
 from langchain_core.messages import AnyMessage
 from coze_coding_utils.runtime_ctx.context import default_headers
-from storage.memory.memory_saver import get_memory_saver
 
-# 导入工具
+# 确保src目录在Python路径中
+workspace_path = os.getenv("COZE_WORKSPACE_PATH", "/workspace/projects")
+src_path = os.path.join(workspace_path, "src")
+if src_path not in sys.path:
+    sys.path.insert(0, src_path)
+
+from storage.memory.memory_saver import get_memory_saver
 from tools.stock_data_tool import (
     get_stock_index_data,
     get_stock_ranking,
